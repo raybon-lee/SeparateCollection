@@ -5,12 +5,25 @@ BeeCloud杯开源代码项目--通用分割线库<br>
 ---
 ## 使用
 * 导入项目中的`LSYLineReveal.h`与`LSYLineReveal.m`文件
-* 实例化`LSYLineReveal`，并且实现下面的方法
+* 实例化`LSYLineReveal`，并且设置分割线下面的属性
 ``` objective-c
-    reveal = [[LSYLineReveal alloc] init];
-    reveal.direction = LSYLineVertical; //设置分割线防线为垂直方向
-    [reveal addAttributes:@{LSYLineColorAttributeName:[UIColor whiteColor],LSYLineLengthAttributeName:@180,LSYLineWidthAttributeName:@5}];  //设置分割线属性
-    [reveal addLineWithViews:@[_view1,_view2,_view3]];  //设置要添加分割线的视图
+extern NSString *const LSYLineColorAttributeName;   //分割线的颜色属性 默认颜色为黑色
+extern NSString *const LSYLineWidthAttributeName;   //分割线的宽度属性 默认宽度为2个单位
+extern NSString *const LSYLineLengthAttributeName;  //分割线的长度 默认根据不同尺寸的视图自动适配
+
+typedef NS_ENUM(NSUInteger,LSYLineDirection){
+    LSYLineHorizontal,  //水平的分割线
+    LSYLineVertical,    //垂直的分割线
+};
+
+@interface LSYLineReveal : NSObject
+
+@property (nonatomic) LSYLineDirection direction;   //分割线的方向
+
+- (void)addAttributes:(NSDictionary<NSString *, id> *)attrs;    //设置分割线的属性
+
+- (void)addLineWithViews:(NSArray<UIView *> *)views;    //要添加分割线的视图
+@end
 ```
 ----
 
