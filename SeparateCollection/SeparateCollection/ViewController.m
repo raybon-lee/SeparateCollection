@@ -28,9 +28,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     reveal = [[LSYLineReveal alloc] init];
-    reveal.direction = LSYLineVertical;
-    [reveal addAttributes:@{LSYLineColorAttributeName:[UIColor whiteColor],LSYLineLengthAttributeName:@180,LSYLineWidthAttributeName:@5}];
-    [reveal addLineWithViews:@[_view1,_view2,_view3]];
+    reveal.direction = LSYLineVertical; //设置分割线防线为垂直方向
+    [reveal addAttributes:@{LSYLineColorAttributeName:[UIColor whiteColor],LSYLineLengthAttributeName:@180,LSYLineWidthAttributeName:@5}];  //设置分割线属性
+    [reveal addLineWithViews:@[_view1,_view2,_view3]];  //设置要添加分割线的视图
 
     h_reveal = [[LSYLineReveal alloc] init];
     h_reveal.direction = LSYLineHorizontal;
