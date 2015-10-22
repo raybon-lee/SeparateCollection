@@ -1,5 +1,5 @@
 # SeparateCollection
-BeeCloud杯开源代码项目--通用分割线库
+BeeCloud杯开源代码项目--通用分割线库<br>
 可以给不同的视图之间添加分割线，并且可以设置分割线的颜色，宽度与长度 
 
 ---
@@ -14,6 +14,6 @@ BeeCloud杯开源代码项目--通用分割线库
 ```
 ----
 
-**注意**
+**注意**<br>
 由于`LSYLineReveal`类里面用到了`CALayer`的代理方法，所以`LSYLineReveal`的实例变量必须为全局变量。具体实现请参考示例代码。
 
