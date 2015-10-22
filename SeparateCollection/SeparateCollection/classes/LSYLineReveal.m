@@ -66,6 +66,8 @@ NSString *const LSYLineLengthAttributeName = @"length";
         UIView *superView = views.firstObject.superview;
         self.lineLayer.frame = CGRectMake(0, 0, superView.frame.size.width, superView.frame.size.height);
         [superView.layer addSublayer:self.lineLayer];
+        [self.lineLayer setNeedsDisplay];
+        
     }
     
     return;
@@ -76,47 +78,25 @@ NSString *const LSYLineLengthAttributeName = @"length";
 -(void)drawLayer:(CALayer *)layer inContext:(CGContextRef)ctx
 {
     typeof(self)weakSelf = self;
-    
+     UIGraphicsPushContext(ctx);
     [_views enumerateObjectsUsingBlock:^(UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         typeof (self) strongSelf = weakSelf;
-        CGRect rect = [obj convertRect:obj.frame toView:obj.superview];
-        if (idx == _views.count-1) {
-            switch (strongSelf.direction) {
-                case LSYLineHorizontal:
-                {
-                    
-                }
-                    break;
-                case LSYLineVertical:
-                {
-                    
-                }
-                    break;
-                case LSYLineTopLeftToButtomRigtht:
-                {
-                    
-                }
-                    break;
-                case LSYLineButtomLeftToTopRigtht:
-                {
-                    
-                }
-                    break;
-                default:
-                    break;
-            }
-            return ;
+        CGRect rect = obj.frame;
+        UIView *superView = obj.superview;
+        if (idx == _views.count -1) {
+             UIGraphicsPopContext();
+            return;
         }
-        CGRect nextRect = [_views[idx+1] convertRect:_views[idx+1].frame toView:_views[idx+1].superview];
+        CGRect nextRect = _views[idx+1].frame;
         switch (strongSelf.direction) {
             case LSYLineHorizontal:
             {
                 CGContextSetLineWidth(ctx, self.width);
                 CGContextSetStrokeColorWithColor(ctx, self.color.CGColor);
-                rect.origin.x < nextRect.origin.x ? CGContextMoveToPoint(ctx, rect.origin.x, rect.origin.y+rect.size.height) : CGContextMoveToPoint(ctx, nextRect.origin.x, rect.origin.y+rect.size.height);
-                (rect.origin.x + rect.size.width)>(nextRect.origin.x + nextRect.size.width) ? CGContextAddLineToPoint(ctx, rect.origin.x + rect.size.width, rect.origin.y+rect.size.height) : CGContextAddLineToPoint(ctx, nextRect.origin.x + nextRect.size.width, rect.origin.y+rect.size.height);
-                if (nextRect.origin.y - rect.origin.y - rect.size.height<self.width) {
-                    CGFloat padding = self.width - (nextRect.origin.y - rect.origin.y - rect.size.height);
+                CGContextMoveToPoint(ctx,_length?(superView.frame.size.width-_length)/2:0, rect.origin.y+rect.size.height+self.width);
+                CGContextAddLineToPoint(ctx, _length?(superView.frame.size.width+_length)/2:superView.frame.size.width, rect.origin.y+rect.size.height+self.width);
+                if (nextRect.origin.y - rect.origin.y - rect.size.height<self.width*2) {
+                    CGFloat padding = self.width*2 - (nextRect.origin.y - rect.origin.y - rect.size.height);
                     _views[idx+1].frame = CGRectMake(_views[idx+1].frame.origin.x, _views[idx+1].frame.origin.y+padding, _views[idx+1].frame.size.width, _views[idx+1].frame.size.height);
                 }
                 CGContextStrokePath(ctx);
@@ -126,10 +106,10 @@ NSString *const LSYLineLengthAttributeName = @"length";
             {
                 CGContextSetLineWidth(ctx, self.width);
                 CGContextSetStrokeColorWithColor(ctx, self.color.CGColor);
-                rect.origin.y < nextRect.origin.y ? CGContextMoveToPoint(ctx, rect.origin.x+rect.size.width, rect.origin.y) : CGContextMoveToPoint(ctx,rect.origin.x+rect.size.width, nextRect.origin.y);
-                (rect.origin.y + rect.size.height)>(nextRect.origin.y + nextRect.size.height) ? CGContextAddLineToPoint(ctx, rect.origin.x + rect.size.width, rect.origin.y+rect.size.height) : CGContextAddLineToPoint(ctx,rect.origin.x + rect.size.width, nextRect.origin.y+nextRect.size.height);
-                if (nextRect.origin.x - rect.origin.x - rect.size.width<self.width) {
-                    CGFloat padding = self.width - (nextRect.origin.x - rect.origin.x - rect.size.width);
+                CGContextMoveToPoint(ctx, rect.origin.x+rect.size.width+self.width,_length?(superView.frame.size.height - _length)/2:0);
+                CGContextAddLineToPoint(ctx, rect.origin.x+rect.size.width+self.width, _length?(superView.frame.size.height+_length)/2:superView.frame.size.height);
+                if (nextRect.origin.x - rect.origin.x - rect.size.width<self.width*2) {
+                    CGFloat padding = self.width*2 - (nextRect.origin.x - rect.origin.x - rect.size.width);
                     _views[idx+1].frame = CGRectMake(_views[idx+1].frame.origin.x+padding, _views[idx+1].frame.origin.y, _views[idx+1].frame.size.width, _views[idx+1].frame.size.height);
                 }
                 CGContextStrokePath(ctx);
@@ -138,6 +118,7 @@ NSString *const LSYLineLengthAttributeName = @"length";
             default:
                 break;
         }
+         UIGraphicsPopContext();
     }];
 }
 

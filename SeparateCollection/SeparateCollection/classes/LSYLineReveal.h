@@ -15,8 +15,6 @@ extern NSString *const LSYLineLengthAttributeName;  //分割线的长度 默认�
 typedef NS_ENUM(NSUInteger,LSYLineDirection){
     LSYLineHorizontal,  //水平的分割线
     LSYLineVertical,    //垂直的分割线
-    LSYLineTopLeftToButtomRigtht,   //仅对单个视图有效。从单个视图的左上角到视图的右下角
-    LSYLineButtomLeftToTopRigtht    //仅对单个视图有效。从单个视图的左下角到视图的右上角
 };
 
 @interface LSYLineReveal : NSObject
