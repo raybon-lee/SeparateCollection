@@ -78,13 +78,13 @@ NSString *const LSYLineLengthAttributeName = @"length";
 -(void)drawLayer:(CALayer *)layer inContext:(CGContextRef)ctx
 {
     typeof(self)weakSelf = self;
-     UIGraphicsPushContext(ctx);
+    UIGraphicsPushContext(ctx);
     [_views enumerateObjectsUsingBlock:^(UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        typeof (self) strongSelf = weakSelf;
+        typeof(weakSelf)strongSelf = weakSelf;
         CGRect rect = obj.frame;
         UIView *superView = obj.superview;
         if (idx == _views.count -1) {
-             UIGraphicsPopContext();
+            UIGraphicsPopContext();
             return;
         }
         CGRect nextRect = _views[idx+1].frame;
@@ -92,7 +92,7 @@ NSString *const LSYLineLengthAttributeName = @"length";
             case LSYLineHorizontal:
             {
                 CGContextSetLineWidth(ctx, self.width);
-                CGContextSetStrokeColorWithColor(ctx, self.color.CGColor);
+                CGContextSetStrokeColorWithColor(ctx, strongSelf.color.CGColor);
                 CGContextMoveToPoint(ctx,_length?(superView.frame.size.width-_length)/2:0, rect.origin.y+rect.size.height+self.width);
                 CGContextAddLineToPoint(ctx, _length?(superView.frame.size.width+_length)/2:superView.frame.size.width, rect.origin.y+rect.size.height+self.width);
                 if (nextRect.origin.y - rect.origin.y - rect.size.height<self.width*2) {
@@ -105,7 +105,7 @@ NSString *const LSYLineLengthAttributeName = @"length";
             case LSYLineVertical:
             {
                 CGContextSetLineWidth(ctx, self.width);
-                CGContextSetStrokeColorWithColor(ctx, self.color.CGColor);
+                CGContextSetStrokeColorWithColor(ctx, strongSelf.color.CGColor);
                 CGContextMoveToPoint(ctx, rect.origin.x+rect.size.width+self.width,_length?(superView.frame.size.height - _length)/2:0);
                 CGContextAddLineToPoint(ctx, rect.origin.x+rect.size.width+self.width, _length?(superView.frame.size.height+_length)/2:superView.frame.size.height);
                 if (nextRect.origin.x - rect.origin.x - rect.size.width<self.width*2) {
@@ -118,7 +118,7 @@ NSString *const LSYLineLengthAttributeName = @"length";
             default:
                 break;
         }
-         UIGraphicsPopContext();
+        UIGraphicsPopContext();
     }];
 }
 
